@@ -34,6 +34,10 @@ namespace WebAPIDemo
             services.AddDefaultIdentity<ApplicationUser>()
                 .AddEntityFrameworkStores<AuthenticationContext>();
 
+            //services.Configure<IdentityOptions>(options =>
+            //{
+            //    options.User.RequireUniqueEmail = true;
+            //});
             services.Configure<IdentityOptions>(options =>
             {
                 options.Password.RequireDigit = false;
@@ -41,6 +45,8 @@ namespace WebAPIDemo
                 options.Password.RequireLowercase = false;
                 options.Password.RequireUppercase = false;
                 options.Password.RequiredLength = 4;
+                options.User.RequireUniqueEmail = true;
+                
             }
             );
             services.AddCors();

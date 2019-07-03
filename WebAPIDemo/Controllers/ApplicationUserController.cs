@@ -16,6 +16,11 @@ namespace WebAPIDemo.Controllers
         private UserManager<ApplicationUser> _userManager;
         private SignInManager<ApplicationUser> _signInManager;
 
+        private readonly string LoginSuccess = "Login Successfull...";
+        private readonly string Login2FA = "User login required two step authentication.";
+        private readonly string LoginLocked = "Your account is locked few time.";
+        private readonly string LoginFailed = "Login Failed";
+
         public ApplicationUserController(UserManager<ApplicationUser> userManager, SignInManager<ApplicationUser> signInManager)
         {
             this._userManager = userManager;
@@ -53,12 +58,23 @@ namespace WebAPIDemo.Controllers
                 var result = await _signInManager.PasswordSignInAsync(model.UserName, model.Password, false, false);
                 if(result.Succeeded)
                 {
-                    return Ok("Sucess Login");
+                    return Ok(LoginSuccess);
+
+                }
+                else if(result.RequiresTwoFactor)
+                {
+                    return Ok(Login2FA);
+                }
+                else if(result.IsLockedOut)
+                {
+                    return Ok(LoginLocked);
                 }
                 else
                 {
-                    return Ok("Failed Login");
+                    return (LoginFailed);
                 }
+
+
             }
             catch (Exception ex)
             {
